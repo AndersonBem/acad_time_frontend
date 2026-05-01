@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Análise de Certificados</title>
+  <meta name="description" content="Sistema AcadTime para gerenciamento de atividades complementares, submissões e auditorias de cursos.">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/cadastrarCurso.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/listarCertificados.css">
+</head>
+
+<body>
+  <div class="layout">
+    <div id="sidebar-container"></div> 
+    <main class="content">
+            <section class="page-header">
+                        <button class="menu-menu" onclick="toggleMenu()">☰</button>
+
+                        <div class="page-title">
+                            <h1>Análise de Certificados</h1>
+                            <p>Gerencie as submissões enviadas pelos alunos</p>
+                        </div>
+            </section>
+      <div class="card card-analise-lista">
+        <div class="card filtros-card">
+          <div class="filtro">
+            <label for="buscarAluno">Buscar aluno</label>
+            <input type="text" id="buscarAluno" placeholder="Nome do aluno">
+          </div>
+
+          <div class="filtro">
+            <label for="filtroCurso">Curso</label>
+            <select id="filtroCurso">
+              <option value="">Todos os cursos</option>
+            </select>
+          </div>
+
+          <div class="filtro">
+            <label for="filtroStatus">Status</label>
+            <select id="filtroStatus">
+              <option value="">Todos os status</option>
+            </select>
+          </div>
+
+          <div class="filtro">
+            <label for="filtroCategoria">Categoria</label>
+            <select id="filtroCategoria">
+              <option value="">Todas as categorias</option>
+            </select>
+          </div>
+
+          <div class="filtro limpar-filtros">
+            <button type="button" class="btn-limpar-filtros" id="btnLimparFiltros">Limpar filtros</button>
+          </div>
+        </div>
+
+        <div class="card tabela-card">
+          <table class="tabela-analise">
+            <thead>
+              <tr>
+                <th>Aluno</th>
+                <th>Curso</th>
+                <th>Categoria</th>
+                <th>Carga Horária</th>
+                <th>Data do envio</th>
+                <th>Status</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody id="lista-submissoes">
+              <tr>
+                <td colspan="7">Carregando submissões...</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="rodape-tabela">
+            <div class="info-tabela" id="infoTabela">Mostrando 0 de 0 submissões</div>
+
+            <div class="paginacao" id="paginacao">
+              <button type="button">&lt;</button>
+              <button type="button" class="ativo">1</button>
+              <button type="button">&gt;</button>
+            </div>
+
+            <div class="itens-pagina">
+              <label for="itensPagina">Itens por página:</label>
+              <select id="itensPagina">
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="20">20</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/sidebar.js"></script>
+  <script src="../js/listarCertificados.js"></script>
+</body>
+
+</html>

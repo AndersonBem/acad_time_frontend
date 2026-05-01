@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <meta name="description" content="Sistema AcadTime para gerenciamento de atividades complementares, submissões e auditorias de cursos.">
+  
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="preload" href="../css/dashboard.css" as="style">
+  <link rel="stylesheet" href="../css/dashboard.css">
+</head>
+
+<body>
+  <div class="layout">
+
+    <div id="sidebar-container"></div>   
+
+    <main class="content dashboard-content">
+
+      <section class="dashboard-header">
+        <button class="menu-menu" onclick="toggleMenu()">☰</button>
+
+        <div class="topo">
+          
+          <h1>Dashboard</h1>
+          <p>Visão geral das submissões e atividades complementares</p>
+          
+        </div>
+        
+        
+      </section>
+
+      <section class="dashboard-filters">
+        <div class="filter-group">
+          <label for="filtroCurso">Curso</label>
+          <select id="filtroCurso">
+            <option value="">Todos os cursos</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="filtroStatus">Status</label>
+          <select id="filtroStatus">
+            <option value="">Todos os status</option>
+            <option value="PENDENTE">Pendentes</option>
+            <option value="APROVADA">Aprovadas</option>
+            <option value="REPROVADA">Reprovadas</option>
+          </select>
+        </div>
+
+        <button id="btnAtualizarDashboard" class="btn-atualizar">
+          Atualizar
+        </button>
+      </section>
+
+      <section class="dashboard-cards">
+        <article class="metric-card">
+          <span class="metric-label">Total de submissões</span>
+          <strong id="totalSubmissoes">0</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">Pendentes</span>
+          <strong id="totalPendentes">0</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">Aprovadas</span>
+          <strong id="totalAprovadas">0</strong>
+        </article>
+
+        <article class="metric-card">
+          <span class="metric-label">Reprovadas</span>
+          <strong id="totalReprovadas">0</strong>
+        </article>
+      </section>
+
+      <section class="dashboard-charts">
+        <article class="chart-card">
+          <div class="chart-header">
+            <h2>Status das submissões</h2>
+            <p>Distribuição entre pendentes, aprovadas e reprovadas</p>
+          </div>
+          <canvas id="graficoStatus"></canvas>
+        </article>
+
+        <article class="chart-card">
+          <div class="chart-header">
+            <h2>Submissões por curso</h2>
+            <p>Quantidade de submissões agrupadas por curso</p>
+          </div>
+          <canvas id="graficoCursos"></canvas>
+        </article>
+      </section>
+
+      <section class="dashboard-table-card">
+        <div class="table-header">
+          <div>
+            <h2>Últimas submissões</h2>
+            <p>Registros mais recentes encontrados no sistema</p>
+          </div>
+        </div>
+
+        <div class="table-wrapper">
+          <table>
+            <thead>
+              <tr>
+                <th>Aluno</th>
+                <th>Curso</th>
+                <th>Categoria</th>
+                <th>Status</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaUltimasSubmissoes">
+              <tr>
+                <td colspan="5">Carregando dados...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="../js/config.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/sidebar.js"></script>
+  <script src="../js/dashboard.js" defer></script>
+</body>
+
+</html>

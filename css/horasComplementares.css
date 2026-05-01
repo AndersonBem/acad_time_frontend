@@ -1,0 +1,390 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  overflow-x: hidden;
+}
+
+/* CONTEÚDO */
+.content {
+  width: 89%;
+  padding: 20px;
+  overflow-y: auto;
+  margin-top: 95px;
+  margin-left: 10px;
+}
+
+/* CARD */
+.card-horas {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.page-title {
+  position: fixed;
+  top: 0;
+  left: 270px;
+  right: 0; 
+  background: none;
+  z-index: 1000;
+  padding: 10px 50px;
+  margin: 0;
+   color:#0d3b82;
+  background-color:#f5f5f5;
+}
+.conteudo {
+  position: relative;
+  z-index: 1;
+}
+
+
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo label {
+  font-weight: 600;
+  color: #1f2f5c;
+}
+
+.campo select,
+.campo input,
+.input-com-texto input,
+.regra textarea {
+  width: 100%; 
+  border: 1px solid #d9d9d9;
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  background: white;
+}
+
+.campo select {
+  appearance: none;
+}
+
+/* INLINE */
+.campo-inline {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+/* INPUT COM TEXTO */
+.input-com-texto {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.input-com-texto input {
+  width: 80px;
+}
+
+/* GRID */
+.cabecalho-regras,
+.linha-regra {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1.3fr 1fr 1fr;
+  gap: 16px;
+}
+
+.linha-regra {
+  border-top: 1px solid #eee;
+  padding-top: 16px;
+  align-items: center;
+}
+
+.cabecalho-regras {
+  font-weight: bold;
+  color: #1f2f5c;
+  border-top: 1px solid #ddd;
+  padding-top: 16px;
+}
+
+/* TEXTO */
+.categoria strong {
+  color: #1f2f5c;
+  font-size: 18px;
+}
+
+.categoria p {
+  margin: 8px 0 0;
+  font-size: 13px;
+  color: #555;
+}
+
+/* TEXTAREA */
+.regra textarea {
+  min-height: 70px;
+  resize: none;
+}
+
+/* STATUS */
+.comprovante,
+.status {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* AÇÕES */
+.acoes-horas {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+/* SWITCH */
+.switch {
+  position: relative;
+  width: 46px;
+  height: 24px;
+}
+
+.switch input {
+  opacity: 0;
+}
+
+.slider {
+  position: absolute;
+  inset: 0;
+  background: #cfcfcf;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.slider::before {
+  content: "";
+  position: absolute;
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  top: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.switch input:checked + .slider {
+  background: #113e98;
+}
+
+.switch input:checked + .slider::before {
+  transform: translateX(22px);
+}
+
+/* HEADER */
+.header-section {
+  width: 100%;
+}
+
+/* BOTÃO */
+.btn-salvar-alt {
+  background: #d98a1f;
+  color: white;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.btn-cancelar-categoria {
+	background: #f3f4f6;
+	color: #1f2f5c;
+	border: 1px solid #d9dde7;
+	border-radius: 10px;
+	padding: 10px 18px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.btn-cancelar-categoria:hover {
+	background: #e7ebf3;
+}
+
+.btn-salvar-categoria {
+	background: #d98b12;
+	color: #fff;
+	border: none;
+	border-radius: 10px;
+	padding: 10px 18px;
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+}
+
+.btn-salvar-categoria:hover {
+	background: #bf7708;
+}
+
+.topo-horas {
+  display: flex;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.topo-horas .campo {
+  flex: 1;
+  margin-bottom: 0;
+}
+
+.btn-nova-categoria {
+  background: #ff9800;
+  color: #fff;
+  border: none;
+  padding: 11px 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+
+
+
+/* ================= RESPONSIVO ================= */
+
+/* TABLET */
+@media (max-width: 900px) {
+  .content {
+    padding: 15px;
+    margin-top: -40px;
+  }
+
+
+}
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .page-header {
+    display: grid;
+    grid-template-columns: 42px 1fr;
+    align-items: start;
+    gap: 14px;
+  }
+
+  .page-title h1 {
+    font-size: 30px;
+    line-height: 1.05;
+    word-break: normal;
+  }
+
+  .page-title p {
+    font-size: 14px;
+    line-height: 1.2;
+  }
+
+  .card-horas {
+    padding: 18px;
+  }
+  .topo-horas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-nova-categoria {
+    width: 100%;
+  }
+  .cabecalho-regras {
+    display: none;
+  }
+
+  .linha-regra {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+    padding: 18px 0;
+  }
+
+  .limite,
+  .regra,
+  .comprovante,
+  .status {
+    justify-content: flex-start;
+  }
+
+  .limite::before {
+    content: "Limite de horas";
+    font-weight: 700;
+    color: #1f2f5c;
+  }
+
+  .regra::before {
+    content: "Regra específica";
+    font-weight: 700;
+    color: #1f2f5c;
+  }
+
+  .comprovante::before {
+    content: "Exige comprovante";
+    font-weight: 700;
+    color: #1f2f5c;
+    margin-right: 12px;
+  }
+
+  .status::before {
+    content: "Status";
+    font-weight: 700;
+    color: #1f2f5c;
+    margin-right: 12px;
+  }
+
+  .limite .input-com-texto {
+    max-width: 180px;
+  }
+
+  .regra textarea {
+    width: 100%;
+    min-height: 80px;
+  }
+
+  .card-horas {
+    overflow: visible;
+  }
+}
+@media (max-width: 420px) {
+  .page-title h1 {
+    font-size: 26px;
+  }
+
+  .page-header {
+    grid-template-columns: 36px 1fr;
+    gap: 10px;
+  }
+}
+@media (max-width: 768px) {
+
+  .page-title {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #ccc;
+    background:#0d3b82;
+    z-index: 1000;
+    padding: 15px 20px;
+  }
+
+  body {
+    padding-top: 80px;
+  }
+
+  .page-title h1 {
+    font-size: 18px;
+    margin-left: 40px;
+  }
+
+  .page-title p {
+    font-size: 12px;
+     margin-left: 40px;
+  }
+}
+

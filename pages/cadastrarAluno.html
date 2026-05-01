@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Cadastro de Aluno</title>
+  <meta name="description" content="Sistema AcadTime para gerenciamento de atividades complementares, submissões e auditorias de cursos.">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+  <link rel="stylesheet" href="../css/cadastrarAluno.css">
+</head>
+
+<body>
+  <div class="layout">
+    <div id="sidebar-container"></div>
+
+    <main class="content">
+       <button class="menu-menu" onclick="toggleMenu()">☰</button>
+        <div class="page-title">
+      <h1>Cadastro/Edição de Aluno(a)</h1>
+      <p>Preencha os dados do aluno(a)</p>
+       </div>
+      <div class="card-form">
+        <div class="campo">
+          <label for="nome">Nome</label>
+          <input type="text" id="nome">
+        </div>
+
+        <div class="linha-dupla">
+          <div class="campo">
+            <label for="email">Email</label>
+            <input type="text" id="email">
+          </div>
+
+          <div class="campo">
+            <label for="matricula">Matrícula</label>
+            <input type="text" id="matricula">
+          </div>
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+          <input type="password" id="senha">
+        </div>
+
+        <div class="campo">
+          <label>Cursos Vinculados</label>
+
+          <div class="cabecalho-cursos">
+            <div>Curso</div>
+            <div>Status da matrícula</div>
+            <div></div>
+          </div>
+
+          <div id="lista-cursos-aluno">
+            <div class="linha-curso-aluno">
+              <select class="curso-select">
+                <option value="">Selecione um curso</option>
+              </select>
+
+              <select class="status-select">
+                <option value="ATIVO">Ativo</option>
+                <option value="TRANCADO">Trancado</option>
+                <option value="CANCELADO">Cancelado</option>
+                <option value="CONCLUIDO">Concluído</option>
+              </select>
+
+              <button type="button" class="btn-add-curso" onclick="adicionarCampoCursoAluno()">+</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="acoes-form">
+          <button class="btn-cancelar" type="button" onclick="window.location.href='alunos.html'">Cancelar</button>
+          <button class="btn-salvar" type="button" onclick="salvarAluno()">Salvar</button>
+        </div>
+      </div>
+    </main>
+  </div>
+  <button class="btn-abrir" id="btnAbrirMenu">☰ </button>
+  <script src="../js/config.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/sidebar.js"></script>
+  <script src="../js/cadastrarAluno.js"></script>
+</body>
+
+</html>

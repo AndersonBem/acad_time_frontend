@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="manifest" href="../manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="description" content="Sistema AcadTime para gerenciamento de atividades complementares, submissões e auditorias de cursos.">
+    <title>Login</title>
+    <link rel="stylesheet" href="../css/login.css">
+</head>
+
+<body>
+
+<section class="login-page">
+
+    <div class="login-brand">
+        <img src="../assets/img/logo.png" alt="Logo AcadTime" class="logo">
+        <h1>Bem-vindo ao AcadTime</h1>
+        <p>Gerencie atividades complementares, certificados e submissões em um só lugar.</p>
+    </div>
+
+    <div class="login-card">
+        <div class="login-box">
+            <h2>Faça Login</h2>
+            <p class="login-subtitle">Acesse o painel administrativo</p>
+
+            <form id="loginForm">
+                <div class="input-group">
+                    <label for="email">E-mail</label>
+                    <input type="email" id="email" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="senha">Senha</label>
+                    <input type="password" id="senha" required>
+                </div>
+
+                <div class="forgot-password">
+                    <a href="../pages/recuperarsenha.html">Esqueceu senha?</a>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Entrar no Sistema
+                </button>
+            </form>
+        </div>
+    </div>
+
+</section>
+
+    </section>
+    <div id="loadingOverlay" class="loading-overlay">
+    <div class="loading-box">
+        <div class="spinner"></div>
+        <p>Entrando no sistema...</p>
+        <small>Aguarde, o servidor pode levar alguns segundos para responder.</small>
+    </div>
+    </div>
+    <button id="installButton" class="btn-install">
+        Instalar app
+    </button>
+    <script src="../js/config.js"></script>
+    <script src="../js/login.js"></script>
+    <script src="../pwa.js"></script>
+    
+</body>
+</html>

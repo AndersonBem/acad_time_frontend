@@ -1,0 +1,287 @@
+.dashboard-content {
+  padding: 32px;
+  margin-top: 85px;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+.topo {
+  position: fixed;
+  top: 0;
+  left: 270px;
+  right: 0; 
+  background: none;
+  z-index: 1000;
+  padding: 10px 50px;
+  margin: 0;
+  color:#0d3b82;
+  background-color:#f5f5f5;
+}
+.conteudo {
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 18px;
+  margin-bottom: 24px;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+}
+
+.dashboard-header p {
+  margin: 6px 0 0;
+}
+
+/* FILTROS */
+.dashboard-filters {
+  display: flex;
+  align-items: end;
+  gap: 16px;
+  background: #fff;
+  padding: 18px;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-bottom: 22px;
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 220px;
+}
+
+.filter-group label {
+  font-size: 14px;
+  font-weight: bold;
+  color: #0d3b82;
+}
+
+.filter-group select {
+  height: 42px;
+  border: 1px solid #d8deea;
+  border-radius: 10px;
+  padding: 0 12px;
+  font-size: 14px;
+  background: #fff;
+  color: #26344d;
+}
+
+.btn-atualizar {
+  height: 42px;
+  padding: 0 22px;
+  border: none;
+  border-radius: 10px;
+  background: #0d3b82;
+  color: #fff;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn-atualizar:hover {
+  opacity: 0.9;
+}
+
+/* CARDS */
+.dashboard-cards {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 1fr));
+  gap: 16px;
+  margin-bottom: 22px;
+}
+
+.metric-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px;
+  min-height: 95px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border-left: 5px solid #5c7cfa;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.metric-label {
+  color: #5f6f89;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.metric-card strong {
+  color: #0d3b82;
+  font-size: 32px;
+}
+
+/* GRÁFICOS */
+.dashboard-charts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 22px;
+  margin-bottom: 22px;
+}
+
+.chart-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  min-height: 380px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  box-sizing: border-box;
+}
+
+.chart-header {
+  margin-bottom: 14px;
+}
+
+.chart-header h2,
+.dashboard-table-card h2 {
+  margin: 0;
+  font-size: 20px;
+  color: #0d3b82;
+}
+
+.chart-header p,
+.table-header p {
+  margin: 5px 0 0;
+  color: #5f6f89;
+  font-size: 14px;
+}
+
+.chart-card canvas {
+  max-height: 300px;
+}
+
+/* TABELA */
+.dashboard-table-card {
+  background: #fff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.table-header {
+  margin-bottom: 16px;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.dashboard-table-card table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+.dashboard-table-card th,
+.dashboard-table-card td {
+  padding: 12px 14px;
+  text-align: left;
+  border-bottom: 1px solid #edf0f5;
+  font-size: 14px;
+}
+
+.dashboard-table-card th {
+  color: #0d3b82;
+  background: #f6f8fc;
+}
+
+.dashboard-table-card td {
+  color: #26344d;
+}
+
+.badge-status {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.badge-pendente {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.badge-aprovada {
+  background: #d4edda;
+  color: #155724;
+}
+
+.badge-reprovada {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+/* RESPONSIVO */
+@media (max-width: 1100px) {
+  .dashboard-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .dashboard-charts {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-content {
+    padding: 18px;
+    margin-top: -40px;
+  }
+    
+
+  .dashboard-header {
+    align-items: flex-start;
+  }
+
+  .dashboard-filters {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .filter-group {
+    min-width: 100%;
+  }
+
+  .dashboard-cards {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-card strong {
+    font-size: 28px;
+  }
+}
+@media (max-width: 768px) {
+
+  .topo {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #d8deea;
+    background:#0d3b82;
+    z-index: 1000;
+    padding: 15px 20px;
+  }
+
+  body {
+    padding-top: 80px;
+  }
+
+  .topo h1 {
+    font-size: 18px;
+    margin-left: 40px;
+  }
+
+  .topo p {
+    font-size: 12px;
+    margin-left: 40px;
+  }
+}

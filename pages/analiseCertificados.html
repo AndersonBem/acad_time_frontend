@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Análise de Certificados</title>
+  <meta name="description" content="Sistema AcadTime para gerenciamento de atividades complementares, submissões e auditorias de cursos.">
+  <link rel="stylesheet" href="../css/global.css">
+  <link rel="stylesheet" href="../css/analiseCertificado.css">
+  <link rel="stylesheet" href="../css/sidebar.css">
+</head>
+
+<body>
+  <div class="layout">
+    <div id="sidebar-container"></div>
+
+    <main class="content">
+
+    <section class="page-header">
+      <button class="menu-menu" onclick="toggleMenu()">☰</button>
+
+      <div class="page-title">
+        <h1>Dados da Submissão</h1>
+        <p>Registro de dados do certificado</p>
+      </div>
+    </section>
+
+      <div class="card analise-card">
+        <div class="analise-layout">
+
+          <div class="coluna-esquerda">
+
+            <section class="bloco-aluno">
+              <h2>Dados da submissão</h2>
+              <p><strong>Aluno:</strong> <span id="alunoNome">-</span></p>
+              <p><strong>E-mail:</strong> <span id="alunoEmail">-</span></p>
+              <p><strong>Curso:</strong> <span id="cursoNome">-</span></p>
+              <p><strong>Data de envio:</strong> <span id="dataEnvio">-</span></p>
+              <p><strong>Status atual:</strong> <span id="statusSubmissaoAtual">-</span></p>
+            </section>
+
+            <section class="bloco-certificado">
+              <h2>Dados da atividade complementar</h2>
+
+              <div class="campo">
+                <div class="grid-form">
+
+                  <div class="campo">
+                    <label for="categoria">Categoria da atividade</label>
+                    <input type="text" id="categoria" readonly>
+                  </div>
+
+                  <div class="campo">
+                    <label for="descricao">Descrição da atividade</label>
+                    <input type="text" id="descricao" readonly>
+                  </div>
+
+                  <div class="campo">
+                    <label for="carga">Carga horária solicitada</label>
+                    <input type="text" id="carga" readonly>
+                  </div>
+
+                  <div class="campo">
+                    <label for="atividadeId">ID da atividade complementar</label>
+                    <input type="text" id="atividadeId" readonly>
+                  </div>
+
+                  <div class="campo">
+                    <label for="cargaAprovada">
+                      Carga horária aprovada
+                      <span class="obrigatorio">*</span>
+                    </label>
+                    <input type="number" id="cargaAprovada" min="0">
+                  </div>
+
+                </div>
+              </div>
+
+              <div class="anexo-box">
+                <h3>Comprovante anexado</h3>
+
+                <div class="arquivo-anexado">
+                  <span class="arquivo-nome" id="arquivoNome">Nenhum arquivo</span>
+
+                  <div class="arquivo-acoes">
+                    <button type="button" id="btnVisualizarArquivo">👁</button>
+                    <button type="button" id="btnBaixarArquivo">⬇</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="ocr-box">
+                <h3>OCR - Dados extraídos
+                  <span class="tag-ocr">Extraído automaticamente</span>
+                </h3>
+
+                <div class="ocr-conteudo">
+                  <p><strong>Nome:</strong> <span id="ocrNome">-</span></p>
+                  <p><strong>Curso:</strong> <span id="ocrCurso">-</span></p>
+                  <p><strong>Carga Horária:</strong> <span id="ocrCarga">-</span></p>
+                  <p><strong>Data:</strong> <span id="ocrData">-</span></p>
+                </div>
+              </div>
+
+              <div class="campo observacoes">
+                <label for="observacoes">Observação da análise</label>
+                <textarea id="observacoes" placeholder="Digite aqui a observação da análise"></textarea>
+              </div>
+
+            </section>
+          </div>
+
+          <div class="coluna-direita">
+
+            <div class="historico">
+              <h3>Histórico de análise</h3>
+
+              <div id="historicoAnalise">
+                <div class="item-historico">
+                  <span class="bolinha"></span>
+                  <div>
+                    <strong>-</strong>
+                    <p>Nenhum histórico carregado</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="acoes-final">
+              <button type="button" class="btn-reprovar" id="btnReprovar">Reprovar</button>
+              <button type="button" class="btn-aprovar" id="btnAprovar">Aprovar</button>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <script src="../js/config.js"></script>
+  <script src="../js/utils.js"></script>
+  <script src="../js/sidebar.js"></script>
+  <script src="../js/analiseCertificados.js"></script>
+</body>
+
+</html>

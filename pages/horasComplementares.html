@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Horas Complementares</title>
+    <meta name="description" content="Sistema AcadTime para gerenciamento de atividades complementares, submissões e auditorias de cursos.">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/cadastrarCurso.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/horasComplementares.css">
+</head>
+
+<body>
+    <div class="layout">
+
+        <div id="sidebar-container"></div>
+
+        <main class="content">
+            <section class="page-header">
+                        <button class="menu-menu" onclick="toggleMenu()">☰</button>
+
+                        <div class="page-title">
+                            <h1>Regras de Atividades por Curso</h1>
+                            <p>Configure limites e regras das atividades complementares</p>
+                        </div>
+            </section>
+            <div class="card card-horas">
+
+
+      
+                    <div class="topo-horas">
+                        <div class="campo">
+                        <label for="curso">Curso</label>
+                        <select id="curso">
+                            <option value="">Selecione um curso</option>
+                        </select>
+                        </div>
+
+                        <button type="button" class="btn-nova-categoria" onclick="abrirModalCategoria()">
+                        + Nova Categoria
+                        </button>
+                    </div>
+
+                <div class="campo-inline">
+                    <label for="cargaMinima">Carga horária mínima para conclusão de curso:</label>
+                    <div class="input-com-texto">
+                        <input type="text" id="cargaMinima" readonly>
+                        <span>Horas</span>
+                    </div>
+                </div>
+
+                <div class="cabecalho-regras">
+                    <div>Categorias de Atividades</div>
+                    <div>Limites de Horas</div>
+                    <div>Regras Específicas de Validação</div>
+                    <div>Exige Comprovante</div>
+                    <div>Status</div>
+                </div>
+
+                <div class="linha-regra" data-tipo="Curso">
+                    <div class="categoria">
+                        <strong>Curso</strong>
+                        <p>Cursos livres</p>
+                    </div>
+
+                    <div class="limite">
+                        <div class="input-com-texto">
+                            <input type="number" value="0">
+                            <span>Horas</span>
+                        </div>
+                    </div>
+
+                    <div class="regra">
+                        <textarea></textarea>
+                    </div>
+
+                    <div class="comprovante">
+                        <label class="switch">
+                            <input type="checkbox" class="chk-comprovante">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="status">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="linha-regra" data-tipo="Palestra">
+                    <div class="categoria">
+                        <strong>Palestra</strong>
+                        <p>Palestras e apresentações</p>
+                    </div>
+
+                    <div class="limite">
+                        <div class="input-com-texto">
+                            <input type="number" value="0">
+                            <span>Horas</span>
+                        </div>
+                    </div>
+
+                    <div class="regra">
+                        <textarea></textarea>
+                    </div>
+
+                    <div class="comprovante">
+                        <label class="switch">
+                            <input type="checkbox" class="chk-comprovante">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="status">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="linha-regra" data-tipo="Workshop">
+                    <div class="categoria">
+                        <strong>Workshop</strong>
+                        <p>Workshops e oficinas</p>
+                    </div>
+
+                    <div class="limite">
+                        <div class="input-com-texto">
+                            <input type="number" value="0">
+                            <span>Horas</span>
+                        </div>
+                    </div>
+
+                    <div class="regra">
+                        <textarea></textarea>
+                    </div>
+
+                    <div class="comprovante">
+                        <label class="switch">
+                            <input type="checkbox" class="chk-comprovante">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="status">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="linha-regra" data-tipo="Monitoria">
+                    <div class="categoria">
+                        <strong>Monitoria</strong>
+                        <p>Monitorias acadêmicas</p>
+                    </div>
+
+                    <div class="limite">
+                        <div class="input-com-texto">
+                            <input type="number" value="0">
+                            <span>Horas</span>
+                        </div>
+                    </div>
+
+                    <div class="regra">
+                        <textarea></textarea>
+                    </div>
+
+                    <div class="comprovante">
+                        <label class="switch">
+                            <input type="checkbox" class="chk-comprovante">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="status">
+                        <label class="switch">
+                            <input type="checkbox">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="acoes-horas">
+                    <button id="btnSalvarRegras" class="btn-salvar-alt">
+                        SALVAR ALTERAÇÕES
+                    </button>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/horasComplementares.js"></script>
+
+</body>
+
+</html>

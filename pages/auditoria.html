@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auditoria</title>
+    <meta name="description" content="Sistema AcadTime para gerenciamento de atividades complementares, submissões e auditorias de cursos.">
+    <link rel="stylesheet" href="../css/global.css">
+    <link rel="stylesheet" href="../css/sidebar.css">
+    <link rel="stylesheet" href="../css/auditoria.css">
+</head>
+
+<body>
+    <div class="layout">
+        <div id="sidebar-container"></div>
+
+        <main class="content auditoria-page">
+        <section class="page-header">
+        <button class="menu-menu" onclick="toggleMenu()">☰</button>
+
+        <div class="page-title">
+            <h1>Logs de Auditoria</h1>
+            <p>Consulte os registros de ações realizadas no sistema</p>
+        </div>
+        </section>
+
+        <div class="card auditoria-card">
+            <div class="topo-auditoria">
+                <input type="text" id="buscar" placeholder="Buscar por usuário, ação ou entidade">
+            </div>
+
+            <div class="table-wrapper">
+                <table class="tabela-auditoria">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Usuário</th>
+                            <th>Ip do usuário</th>
+                            <th>Ação</th>
+                            <th>Entidade</th>
+                            <th>Descrição</th>
+                            <th>Detalhes</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="tabelaAuditoria"></tbody>
+                </table>
+            </div>
+
+            <div class="paginacao">
+                <button id="btnAnterior">Anterior</button>
+                <span id="infoPagina"></span>
+                <button id="btnProximo">Próximo</button>
+            </div>
+        </div>
+
+        <div id="modalAuditoria" class="modal-auditoria">
+            <div class="modal-content">
+                <button class="fechar-modal" onclick="fecharModal()">×</button>
+                <h2>Detalhes do Log</h2>
+
+                
+                <pre id="valorAnterior"></pre>
+
+                
+                <pre id="valorNovo"></pre>
+            </div>
+        </div>
+        </main>
+    </div>
+
+    <script src="../js/config.js"></script>
+    <script src="../js/utils.js"></script>
+    <script src="../js/sidebar.js"></script>
+    <script src="../js/auditoria.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,341 @@
+.content {
+  margin-top: 85px;
+  margin-left: 0px;
+  width: 100%;
+}
+
+.page-title {
+  position: fixed;
+  top: 0;
+  left: 270px;
+  right: 0; 
+  background: none;
+  z-index: 1000;
+  padding: 10px 50px;
+  margin: 0;
+   color:#0d3b82;
+  background-color:#f5f5f5;
+}
+.conteudo {
+  position: relative;
+  z-index: 1;
+}
+
+
+.topo-cursos {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+  align-items: center;
+}
+
+input,
+select {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.button1 {
+  background: orange;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+}
+
+
+
+.menu-toggle {
+  background: orange;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  margin-left: 90%;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.btn-editar {
+  background: #0d3b82;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-excluir {
+  background: red;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+/* ===== RESPONSIVO ADICIONADO ===== */
+
+/* Tablet (1200px - 900px) */
+@media (max-width: 1200px) {
+  .content {
+    margin-left: 0px;
+  
+  
+  }
+  
+  .menu-toggle {
+    margin-left: 85%;
+  }
+}
+
+/* Tablet pequeno (900px - 768px) */
+@media (max-width: 900px) {
+  .content {
+    margin-left: 0;
+    padding: 15px;
+    margin-top: -40px;
+   
+  }
+  
+  .topo-cursos {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .topo-cursos input,
+  .topo-cursos select {
+    flex: 1;
+    min-width: 150px;
+  }
+  
+  .button1 {
+    min-width: 100px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+  
+  .menu-toggle {
+    margin-left: 80%;
+  }
+  
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+  
+  th, td {
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .btn-editar,
+  .btn-excluir {
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+}
+
+/* Mobile (768px - 480px) */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0;
+       margin-top: -40px;
+    padding: 12px;
+    
+  }
+  
+  .topo-cursos {
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .topo-cursos input,
+  .topo-cursos select {
+    width: 100%;
+    padding: 8px;
+    font-size: 14px;
+  }
+  
+  .button1 {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+  
+  .menu-toggle {
+    margin-left: 70%;
+    padding: 8px 12px;
+    font-size: 14px;
+  }
+
+  
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    font-size: 13px;
+  }
+  
+  th, td {
+    padding: 8px;
+    font-size: 13px;
+  }
+  
+  .btn-editar,
+  .btn-excluir {
+    padding: 5px 8px;
+    font-size: 11px;
+    border-radius: 4px;
+  }
+  
+  /* Empilhar ações da tabela em telas muito pequenas */
+  td:last-child {
+    display: flex;
+    gap: 8px;
+    white-space: normal;
+  }
+}
+
+/* Mobile pequeno (480px - 320px) */
+@media (max-width: 480px) {
+  .content {
+    padding: 10px;
+    margin-top: 0;
+       margin-top: -30px;
+  }
+  
+  .topo-cursos {
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  
+  .topo-cursos input,
+  .topo-cursos select {
+    padding: 7px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+  
+  .button1 {
+    padding: 8px;
+    font-size: 13px;
+    border-radius: 6px;
+  }
+  
+  .menu-toggle {
+    margin-left: 60%;
+    padding: 6px 10px;
+    font-size: 12px;
+  }
+  
+
+  
+  th, td {
+    padding: 6px;
+    font-size: 12px;
+  }
+  
+  .btn-editar,
+  .btn-excluir {
+    padding: 4px 6px;
+    font-size: 10px;
+  }
+}
+
+/* Mobile muito pequeno (até 360px) */
+@media (max-width: 360px) {
+  .content {
+    padding: 8px;
+       margin-top: -30px;
+  }
+  
+  .menu-toggle {
+    margin-left: 50%;
+  }
+  
+  th, td {
+    padding: 5px;
+    font-size: 11px;
+  }
+  
+  .btn-editar,
+  .btn-excluir {
+    padding: 3px 5px;
+    font-size: 9px;
+  }
+}
+
+/* Landscape (orientação horizontal em mobile) */
+@media (max-width: 900px) and (orientation: landscape) {
+  .topo-cursos {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .topo-cursos input,
+  .topo-cursos select {
+    flex: 1;
+    min-width: 120px;
+  }
+  
+  .button1 {
+    width: auto;
+    min-width: 100px;
+  }
+  
+  .menu-toggle {
+    margin-left: 80%;
+  }
+  
+  table {
+    font-size: 12px;
+  }
+  
+  th, td {
+    padding: 6px;
+  }
+}
+
+@media (max-width: 768px) {
+
+  .page-title {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    right: 0;
+    color: #ccc;
+    background:#0d3b82;
+    z-index: 1000;
+    padding: 15px 20px;
+  }
+
+  body {
+    padding-top: 80px;
+  }
+
+  .page-title h1 {
+    font-size: 18px;
+    margin-left: 40px;
+  }
+
+  .page-title p {
+    font-size: 12px;
+     margin-left: 40px;
+  }
+}
