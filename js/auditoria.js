@@ -1,25 +1,49 @@
 protegerPagina();
+
 let logs = [];
-let logsFiltrados = [];
 let paginaAtual = 1;
 const itensPorPagina = 8;
+let totalLogs = 0;
 
 async function carregarLogs() {
     const token = localStorage.getItem("access_token");
+    const busca = document.getElementById("buscar").value.trim();
 
-    const response = await fetch(`${CONFIG.BASE_URL}${CONFIG.ENDPOINTS.auditoria}`, {
-        headers: {
-            Authorization: `Bearer ${token}`
+    const params = new URLSearchParams();
+
+    params.set("page", paginaAtual);
+    params.set("page_size", itensPorPagina);
+
+    if (busca) {
+        params.set("busca", busca);
+    }
+
+    const response = await fetch(
+        `${CONFIG.BASE_URL}${CONFIG.ENDPOINTS.auditoria}?${params.toString()}`,
+        {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
         }
-    });
+    );
 
     if (!response.ok) {
+        logs = [];
+        totalLogs = 0;
+        renderizarTabela();
         alert("Erro ao carregar logs de auditoria");
         return;
     }
 
-    logs = await response.json();
-    logsFiltrados = logs;
+    const dados = await response.json();
+
+    logs = Array.isArray(dados)
+        ? dados
+        : dados.results || [];
+
+    totalLogs = Array.isArray(dados)
+        ? logs.length
+        : dados.count || 0;
 
     renderizarTabela();
 }
@@ -28,11 +52,18 @@ function renderizarTabela() {
     const tabela = document.getElementById("tabelaAuditoria");
     tabela.innerHTML = "";
 
-    const inicio = (paginaAtual - 1) * itensPorPagina;
-    const fim = inicio + itensPorPagina;
-    const logsPagina = logsFiltrados.slice(inicio, fim);
+    if (!logs.length) {
+        tabela.innerHTML = `
+            <tr>
+                <td colspan="7">Nenhum log de auditoria encontrado.</td>
+            </tr>
+        `;
 
-    logsPagina.forEach((log, index) => {
+        atualizarPaginacao();
+        return;
+    }
+
+    logs.forEach((log, index) => {
         const linha = document.createElement("tr");
 
         linha.innerHTML = `
@@ -43,7 +74,7 @@ function renderizarTabela() {
             <td>${log.nome_entidade || "-"}</td>
             <td>${log.descricao || "-"}</td>
             <td>
-                <button class="btn-detalhes" onclick="abrirModal(${inicio + index})">
+                <button class="btn-detalhes" onclick="abrirModal(${index})">
                     Ver detalhes
                 </button>
             </td>
@@ -56,10 +87,14 @@ function renderizarTabela() {
 }
 
 function atualizarPaginacao() {
-    const totalPaginas = Math.ceil(logsFiltrados.length / itensPorPagina);
+    const totalPaginas = Math.max(1, Math.ceil(totalLogs / itensPorPagina));
+
+    if (paginaAtual > totalPaginas) {
+        paginaAtual = totalPaginas;
+    }
 
     document.getElementById("infoPagina").textContent =
-        `Página ${paginaAtual} de ${totalPaginas || 1}`;
+        `Página ${paginaAtual} de ${totalPaginas}`;
 
     document.getElementById("btnAnterior").disabled = paginaAtual === 1;
     document.getElementById("btnProximo").disabled = paginaAtual >= totalPaginas;
@@ -68,36 +103,28 @@ function atualizarPaginacao() {
 document.getElementById("btnAnterior").addEventListener("click", () => {
     if (paginaAtual > 1) {
         paginaAtual--;
-        renderizarTabela();
+        carregarLogs();
     }
 });
 
 document.getElementById("btnProximo").addEventListener("click", () => {
-    const totalPaginas = Math.ceil(logsFiltrados.length / itensPorPagina);
+    const totalPaginas = Math.max(1, Math.ceil(totalLogs / itensPorPagina));
 
     if (paginaAtual < totalPaginas) {
         paginaAtual++;
-        renderizarTabela();
+        carregarLogs();
     }
 });
 
-document.getElementById("buscar").addEventListener("input", (event) => {
-    const termo = event.target.value.toLowerCase();
-
-    logsFiltrados = logs.filter(log =>
-        String(log.usuario_nome || "").toLowerCase().includes(termo) ||
-        String(log.usuario_email || "").toLowerCase().includes(termo) ||
-        String(log.tipo_acao_nome || "").toLowerCase().includes(termo) ||
-        String(log.nome_entidade || "").toLowerCase().includes(termo) ||
-        String(log.descricao || "").toLowerCase().includes(termo)
-    );
-
+document.getElementById("buscar").addEventListener("input", () => {
     paginaAtual = 1;
-    renderizarTabela();
+    carregarLogs();
 });
 
 function abrirModal(index) {
-    const log = logsFiltrados[index];
+    const log = logs[index];
+
+    if (!log) return;
 
     const anterior = log.valor_anterior || {};
     const novo = log.valor_novo || {};

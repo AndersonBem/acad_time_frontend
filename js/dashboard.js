@@ -1,12 +1,12 @@
 protegerPagina();
-let submissoes = [];
+
+let resumoDashboard = null;
 let cursos = [];
 let graficoStatus = null;
 let graficoCursos = null;
 
 const ENDPOINTS = {
-  submissoes: CONFIG.BASE_URL + CONFIG.ENDPOINTS.submissao,
-  cursos: CONFIG.BASE_URL + CONFIG.ENDPOINTS.curso,
+  resumoDashboard: `${CONFIG.BASE_URL.replace(/\/$/, "")}${CONFIG.ENDPOINTS.submissao}resumo-dashboard/`,
 };
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,15 +14,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document
     .getElementById("btnAtualizarDashboard")
-    .addEventListener("click", aplicarFiltros);
+    .addEventListener("click", carregarDashboard);
 
   document
     .getElementById("filtroCurso")
-    .addEventListener("change", aplicarFiltros);
+    .addEventListener("change", carregarDashboard);
 
   document
     .getElementById("filtroStatus")
-    .addEventListener("change", aplicarFiltros);
+    .addEventListener("change", carregarDashboard);
 });
 
 function getToken() {
@@ -47,30 +47,43 @@ async function buscarDados(url) {
   return response.json();
 }
 
+function montarUrlResumo() {
+  const cursoSelecionado = document.getElementById("filtroCurso").value;
+  const statusSelecionado = document.getElementById("filtroStatus").value;
+
+  const params = new URLSearchParams();
+
+  if (cursoSelecionado) {
+    params.set("curso", cursoSelecionado);
+  }
+
+  if (statusSelecionado) {
+    params.set("status", statusSelecionado);
+  }
+
+  const queryString = params.toString();
+
+  return queryString
+    ? `${ENDPOINTS.resumoDashboard}?${queryString}`
+    : ENDPOINTS.resumoDashboard;
+}
+
 async function carregarDashboard() {
   try {
-    const dadosSubmissoes = await buscarDados(ENDPOINTS.submissoes);
+    const cursoAtual = document.getElementById("filtroCurso").value;
 
-    submissoes = Array.isArray(dadosSubmissoes)
-      ? dadosSubmissoes
-      : dadosSubmissoes.results || [];
+    resumoDashboard = await buscarDados(montarUrlResumo());
 
-    cursos = [
-      ...new Map(
-        submissoes
-          .filter((item) => item.curso && item.curso_nome)
-          .map((item) => [
-            item.curso,
-            {
-              id_curso: item.curso,
-              nome: item.curso_nome,
-            },
-          ])
-      ).values(),
-    ];
+    cursos = Array.isArray(resumoDashboard.cursos)
+      ? resumoDashboard.cursos
+      : [];
 
-    preencherFiltroCursos();
-    aplicarFiltros();
+    preencherFiltroCursos(cursoAtual);
+
+    atualizarCards(resumoDashboard);
+    atualizarGraficoStatus(resumoDashboard.por_status || {});
+    atualizarGraficoCursos(resumoDashboard.por_curso || []);
+    atualizarTabela(resumoDashboard.ultimas || []);
 
   } catch (error) {
     console.error(error);
@@ -78,105 +91,42 @@ async function carregarDashboard() {
   }
 }
 
-function preencherFiltroCursos() {
+function preencherFiltroCursos(valorAtual = "") {
   const filtroCurso = document.getElementById("filtroCurso");
 
   filtroCurso.innerHTML = `<option value="">Todos os cursos</option>`;
 
   cursos.forEach((curso) => {
-    const id = curso.id_curso || curso.id || curso.curso;
-    const nome = curso.nome || curso.nome_curso || curso.curso_nome || `Curso ${id}`;
+    const id = curso.id;
+    const nome = curso.nome || `Curso ${id}`;
 
     filtroCurso.innerHTML += `
       <option value="${id}">${nome}</option>
     `;
   });
+
+  filtroCurso.value = valorAtual;
 }
 
-function aplicarFiltros() {
-  const cursoSelecionado = document.getElementById("filtroCurso").value;
-  const statusSelecionado = document.getElementById("filtroStatus").value;
-
-  let dadosFiltrados = [...submissoes];
-
-  if (cursoSelecionado) {
-    dadosFiltrados = dadosFiltrados.filter((item) => {
-      const cursoId = item.curso || item.id_curso || item.curso_id;
-      return String(cursoId) === String(cursoSelecionado);
-    });
-  }
-
-  if (statusSelecionado) {
-    dadosFiltrados = dadosFiltrados.filter((item) => {
-      const status = obterStatus(item);
-      return status === statusSelecionado;
-    });
-  }
-
-  atualizarCards(dadosFiltrados);
-  atualizarGraficoStatus(dadosFiltrados);
-  atualizarGraficoCursos(dadosFiltrados);
-  atualizarTabela(dadosFiltrados);
+function obterTotalStatus(porStatus, nomeStatus) {
+  return Number(porStatus?.[nomeStatus] || 0);
 }
 
-function obterStatus(item) {
-  return (
-    item.status_submissao_nome ||
-    item.status_nome ||
-    item.nome_status ||
-    item.status_submissao ||
-    ""
-  )
-    .toString()
-    .toUpperCase();
+function atualizarCards(resumo) {
+  const porStatus = resumo?.por_status || {};
+
+  document.getElementById("totalSubmissoes").textContent = resumo?.total || 0;
+  document.getElementById("totalPendentes").textContent = obterTotalStatus(porStatus, "PENDENTE");
+  document.getElementById("totalAprovadas").textContent = obterTotalStatus(porStatus, "APROVADA");
+  document.getElementById("totalReprovadas").textContent = obterTotalStatus(porStatus, "REPROVADA");
 }
 
-function obterNomeCurso(item) {
-  return (
-    item.curso_nome ||
-    item.nome_curso ||
-    item.curso?.nome ||
-    buscarNomeCursoPorId(item.curso) ||
-    "Não informado"
-  );
-}
-
-function buscarNomeCursoPorId(id) {
-  const curso = cursos.find((c) => String(c.id_curso || c.id) === String(id));
-  return curso ? curso.nome || curso.nome_curso : null;
-}
-
-function obterNomeAluno(item) {
-  return (
-    item.aluno_nome ||
-    item.nome_aluno ||
-    item.aluno?.nome ||
-    "Não informado"
-  );
-}
-
-function obterNomeAtividade(item) {
-  return item.atividade_categoria || "Não informado";
-}
-
-function atualizarCards(dados) {
-  const total = dados.length;
-  const pendentes = dados.filter((item) => obterStatus(item) === "PENDENTE").length;
-  const aprovadas = dados.filter((item) => obterStatus(item) === "APROVADA").length;
-  const reprovadas = dados.filter((item) => obterStatus(item) === "REPROVADA").length;
-
-  document.getElementById("totalSubmissoes").textContent = total;
-  document.getElementById("totalPendentes").textContent = pendentes;
-  document.getElementById("totalAprovadas").textContent = aprovadas;
-  document.getElementById("totalReprovadas").textContent = reprovadas;
-}
-
-function atualizarGraficoStatus(dados) {
+function atualizarGraficoStatus(porStatus) {
   const ctx = document.getElementById("graficoStatus");
 
-  const pendentes = dados.filter((item) => obterStatus(item) === "PENDENTE").length;
-  const aprovadas = dados.filter((item) => obterStatus(item) === "APROVADA").length;
-  const reprovadas = dados.filter((item) => obterStatus(item) === "REPROVADA").length;
+  const pendentes = obterTotalStatus(porStatus, "PENDENTE");
+  const aprovadas = obterTotalStatus(porStatus, "APROVADA");
+  const reprovadas = obterTotalStatus(porStatus, "REPROVADA");
 
   if (graficoStatus) {
     graficoStatus.destroy();
@@ -205,18 +155,11 @@ function atualizarGraficoStatus(dados) {
   });
 }
 
-function atualizarGraficoCursos(dados) {
+function atualizarGraficoCursos(porCurso) {
   const ctx = document.getElementById("graficoCursos");
 
-  const contagemPorCurso = {};
-
-  dados.forEach((item) => {
-    const nomeCurso = obterNomeCurso(item);
-    contagemPorCurso[nomeCurso] = (contagemPorCurso[nomeCurso] || 0) + 1;
-  });
-
-  const labels = Object.keys(contagemPorCurso);
-  const valores = Object.values(contagemPorCurso);
+  const labels = porCurso.map((item) => item.nome || `Curso ${item.id}`);
+  const valores = porCurso.map((item) => Number(item.total || 0));
 
   if (graficoCursos) {
     graficoCursos.destroy();
@@ -254,10 +197,44 @@ function atualizarGraficoCursos(dados) {
   });
 }
 
-function atualizarTabela(dados) {
+function obterStatus(item) {
+  return (
+    item.status_submissao_nome ||
+    item.status_nome ||
+    item.nome_status ||
+    item.status_submissao ||
+    ""
+  )
+    .toString()
+    .toUpperCase();
+}
+
+function obterNomeCurso(item) {
+  return (
+    item.curso_nome ||
+    item.nome_curso ||
+    item.curso?.nome ||
+    "Não informado"
+  );
+}
+
+function obterNomeAluno(item) {
+  return (
+    item.aluno_nome ||
+    item.nome_aluno ||
+    item.aluno?.nome ||
+    "Não informado"
+  );
+}
+
+function obterNomeAtividade(item) {
+  return item.atividade_categoria || "Não informado";
+}
+
+function atualizarTabela(ultimas) {
   const tbody = document.getElementById("tabelaUltimasSubmissoes");
 
-  if (!dados.length) {
+  if (!ultimas.length) {
     tbody.innerHTML = `
       <tr>
         <td colspan="5">Nenhuma submissão encontrada.</td>
@@ -265,8 +242,6 @@ function atualizarTabela(dados) {
     `;
     return;
   }
-
-  const ultimas = dados.slice(0, 8);
 
   tbody.innerHTML = ultimas
     .map((item) => {
@@ -326,4 +301,3 @@ function logout() {
   localStorage.removeItem("access_token");
   window.location.href = "login.html";
 }
-

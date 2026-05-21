@@ -87,6 +87,80 @@ td {
   cursor: pointer;
 }
 
+.rodape-tabela {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.info-tabela {
+  color: #475569;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.paginacao {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.paginacao button {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 10px;
+  border: 1px solid #d8dee9;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #0d3b82;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.paginacao button:hover:not(:disabled) {
+  background: #eef4ff;
+  border-color: #0d3b82;
+}
+
+.paginacao button.ativo {
+  background: #0d3b82;
+  border-color: #0d3b82;
+  color: #ffffff;
+}
+
+.paginacao button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+.itens-pagina {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #475569;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.itens-pagina select {
+  height: 36px;
+  padding: 0 32px 0 10px;
+  border: 1px solid #d8dee9;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #0d3b82;
+  font-weight: 600;
+}
+
 /* ===== RESPONSIVO ADICIONADO ===== */
 
 /* Tablet (1200px - 900px) */
@@ -136,6 +210,23 @@ td {
     display: block;
     overflow-x: auto;
     white-space: nowrap;
+  }
+
+  .rodape-tabela {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .info-tabela,
+  .itens-pagina {
+    justify-content: center;
+    text-align: center;
+    white-space: normal;
+  }
+
+  .paginacao {
+    justify-content: center;
   }
   
   th, td {
@@ -217,7 +308,7 @@ td {
   .content {
     padding: 10px;
     margin-top: 0;
-       margin-top: -30px;
+
   }
   
   .topo-cursos {
@@ -256,7 +347,26 @@ td {
     padding: 4px 6px;
     font-size: 10px;
   }
+    .paginacao button {
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    border-radius: 6px;
+    font-size: 12px;
+  }
+
+  .itens-pagina {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .itens-pagina select {
+    width: 100%;
+    max-width: 160px;
+  }
 }
+
+
 
 /* Mobile muito pequeno (até 360px) */
 @media (max-width: 360px) {

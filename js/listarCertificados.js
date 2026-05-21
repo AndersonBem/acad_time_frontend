@@ -5,9 +5,11 @@ const token = localStorage.getItem("access_token");
 let submissoesCarregadas = [];
 let cursosCarregados = [];
 let statusCarregados = [];
+let categoriasCarregadas = [];
 
 let paginaAtual = 1;
 let itensPorPagina = 5;
+let totalSubmissoes = 0;
 
 function normalizarTexto(texto) {
 	return String(texto || "")
@@ -63,16 +65,18 @@ function obterTextoBotao(status) {
 }
 
 
-function carregarCursos() {
-	const nomesCursos = [
-		...new Set(
-			submissoesCarregadas
-				.map((item) => item.curso_nome)
-				.filter(Boolean)
-		),
-	];
+async function carregarCursos() {
+    const response = await fetch(`${API_BASE_URL}${CONFIG.ENDPOINTS.curso}`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
 
-	cursosCarregados = nomesCursos.map((nome) => ({ nome }));
+    if (!response.ok) throw new Error("Erro ao carregar cursos.");
+
+    const dados = await response.json();
+    cursosCarregados = Array.isArray(dados) ? dados : dados.results || [];
 }
 
 async function carregarStatus() {
@@ -94,16 +98,42 @@ async function carregarStatus() {
 
 
 async function carregarSubmissoes() {
-	const response = await fetch(`${API_BASE_URL}${CONFIG.ENDPOINTS.submissao}`, {
-		method: "GET",
-		headers: {
-			Authorization: `Bearer ${token}`,
-		},
-	});
+    const busca = document.getElementById("buscarAluno").value.trim();
+    const curso = document.getElementById("filtroCurso").value;
+    const status = document.getElementById("filtroStatus").value;
+    const categoria = document.getElementById("filtroCategoria").value;
 
-	if (!response.ok) throw new Error("Erro ao carregar submissões.");
+    const params = new URLSearchParams();
 
-	submissoesCarregadas = await response.json();
+    if (busca) params.set("busca", busca);
+    if (curso) params.set("curso", curso);
+    if (status) params.set("status", status);
+    if (categoria) params.set("categoria", categoria);
+
+    params.set("page", paginaAtual);
+    params.set("page_size", itensPorPagina);
+
+    const response = await fetch(
+        `${API_BASE_URL}${CONFIG.ENDPOINTS.submissao}?${params.toString()}`,
+        {
+            method: "GET",
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        },
+    );
+
+    if (!response.ok) throw new Error("Erro ao carregar submissões.");
+
+    const dados = await response.json();
+
+    submissoesCarregadas = Array.isArray(dados)
+        ? dados
+        : dados.results || [];
+
+    totalSubmissoes = Array.isArray(dados)
+        ? submissoesCarregadas.length
+        : dados.count || 0;
 }
 
 function preencherFiltroCursos() {
@@ -144,71 +174,48 @@ function preencherFiltroStatus() {
 	select.value = atual;
 }
 
+async function carregarCategorias() {
+    const response = await fetch(`${API_BASE_URL}${CONFIG.ENDPOINTS.tipoAtividade}`, {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (!response.ok) throw new Error("Erro ao carregar categorias.");
+
+    const dados = await response.json();
+    categoriasCarregadas = Array.isArray(dados) ? dados : dados.results || [];
+}
+
 function preencherFiltroCategoria() {
-	const select = document.getElementById("filtroCategoria");
-	const atual = select.value;
+    const select = document.getElementById("filtroCategoria");
+    const atual = select.value;
 
-	const categorias = [
-		...new Set(
-			submissoesCarregadas
-				.map((item) => item.atividade_categoria)
-				.filter(Boolean),
-		),
-	];
+    select.innerHTML = `<option value="">Todas as categorias</option>`;
 
-	select.innerHTML = `<option value="">Todas as categorias</option>`;
+    categoriasCarregadas
+        .sort((a, b) => (a.nome || "").localeCompare(b.nome || "", "pt-BR"))
+        .forEach((categoria) => {
+            const option = document.createElement("option");
+            option.value = categoria.nome;
+            option.textContent = categoria.nome;
+            select.appendChild(option);
+        });
 
-	categorias
-		.sort((a, b) => a.localeCompare(b, "pt-BR"))
-		.forEach((cat) => {
-			const option = document.createElement("option");
-			option.value = cat;
-			option.textContent = cat;
-			select.appendChild(option);
-		});
-
-	select.value = atual;
+    select.value = atual;
 }
 
-function obterFiltrados() {
-	const busca = normalizarTexto(document.getElementById("buscarAluno").value);
-	const curso = document.getElementById("filtroCurso").value;
-	const status = document.getElementById("filtroStatus").value;
-	const categoria = document.getElementById("filtroCategoria").value;
-
-	return submissoesCarregadas.filter((item) => {
-		const aluno = item.aluno_nome || "";
-		const cursoNome = item.curso_nome || "";
-		const statusNome = item.status_submissao_nome || "";
-
-		const categoriaNome = item.atividade_categoria || "";
-
-		const matchBusca = !busca || normalizarTexto(aluno).includes(busca);
-
-		const matchCurso = !curso || cursoNome === curso;
-
-		const matchStatus = !status || statusNome === status;
-
-		const matchCategoria = !categoria || categoriaNome === categoria;
-
-		return matchBusca && matchCurso && matchStatus && matchCategoria;
-	});
-}
 
 function renderizarTabela() {
 	const tbody = document.getElementById("lista-submissoes");
 	const info = document.getElementById("infoTabela");
 
-	const lista = obterFiltrados();
-
-	const inicio = (paginaAtual - 1) * itensPorPagina;
-	const fim = inicio + itensPorPagina;
-
-	const pagina = lista.slice(inicio, fim);
+	const lista = submissoesCarregadas;
 
 	tbody.innerHTML = "";
 
-	if (pagina.length === 0) {
+	if (lista.length === 0) {
 		tbody.innerHTML = `
       <tr>
         <td colspan="7">Nenhuma submissão encontrada.</td>
@@ -216,7 +223,7 @@ function renderizarTabela() {
     `;
 	}
 
-	pagina.forEach((item) => {
+	lista.forEach((item) => {
 		const categoria = item.atividade_categoria || "-";
 		const carga = item.carga_horaria_solicitada || "-"
 
@@ -245,9 +252,34 @@ function renderizarTabela() {
 		tbody.appendChild(tr);
 	});
 
-	info.textContent = `Mostrando ${pagina.length} de ${lista.length} submissões`;
+	info.textContent = `Mostrando ${lista.length} de ${totalSubmissoes} submissões`;
 
-	renderizarPaginacao(lista.length);
+	renderizarPaginacao(totalSubmissoes);
+}
+
+async function atualizarLista() {
+    try {
+        await carregarSubmissoes();
+        renderizarTabela();
+    } catch (error) {
+        console.error(error);
+
+        submissoesCarregadas = [];
+        totalSubmissoes = 0;
+
+        document.getElementById("lista-submissoes").innerHTML = `
+            <tr>
+                <td colspan="7">Erro ao carregar submissões.</td>
+            </tr>
+        `;
+
+        const info = document.getElementById("infoTabela");
+        if (info) {
+            info.textContent = "Mostrando 0 de 0 submissões";
+        }
+
+        renderizarPaginacao(0);
+    }
 }
 
 function renderizarPaginacao(totalItens) {
@@ -264,7 +296,7 @@ function renderizarPaginacao(totalItens) {
 	btnAnterior.disabled = paginaAtual === 1;
 	btnAnterior.onclick = () => {
 		paginaAtual--;
-		renderizarTabela();
+		atualizarLista();
 	};
 	container.appendChild(btnAnterior);
 
@@ -278,7 +310,7 @@ function renderizarPaginacao(totalItens) {
 
 		btn.onclick = () => {
 			paginaAtual = i;
-			renderizarTabela();
+			atualizarLista();
 		};
 
 		container.appendChild(btn);
@@ -289,7 +321,7 @@ function renderizarPaginacao(totalItens) {
 	btnProximo.disabled = paginaAtual === totalPaginas;
 	btnProximo.onclick = () => {
 		paginaAtual++;
-		renderizarTabela();
+		atualizarLista();
 	};
 	container.appendChild(btnProximo);
 }
@@ -297,28 +329,28 @@ function renderizarPaginacao(totalItens) {
 function configurarEventos() {
 	document.getElementById("buscarAluno").addEventListener("input", () => {
 		paginaAtual = 1;
-		renderizarTabela();
+		atualizarLista();
 	});
 
 	document.getElementById("filtroCurso").addEventListener("change", () => {
 		paginaAtual = 1;
-		renderizarTabela();
+		atualizarLista();
 	});
 
 	document.getElementById("filtroStatus").addEventListener("change", () => {
 		paginaAtual = 1;
-		renderizarTabela();
+		atualizarLista();
 	});
 
 	document.getElementById("filtroCategoria").addEventListener("change", () => {
 		paginaAtual = 1;
-		renderizarTabela();
+		atualizarLista();
 	});
 
 	document.getElementById("itensPagina").addEventListener("change", (e) => {
 		itensPorPagina = Number(e.target.value);
 		paginaAtual = 1;
-		renderizarTabela();
+		atualizarLista();
 	});
 
 	document.getElementById("btnLimparFiltros").addEventListener("click", () => {
@@ -327,7 +359,7 @@ function configurarEventos() {
 		document.getElementById("filtroStatus").value = "";
 		document.getElementById("filtroCategoria").value = "";
 		paginaAtual = 1;
-		renderizarTabela();
+		atualizarLista();
 	});
 }
 
@@ -335,17 +367,16 @@ async function iniciarTela() {
 	try {
 		await Promise.all([
 			carregarStatus(),
-			carregarSubmissoes(),
+			carregarCursos(),
+			carregarCategorias(),
 		]);
-
-		carregarCursos();
 
 		preencherFiltroCursos();
 		preencherFiltroStatus();
 		preencherFiltroCategoria();
 
 		configurarEventos();
-		renderizarTabela();
+		await atualizarLista();
 	} catch (error) {
 		console.error(error);
 

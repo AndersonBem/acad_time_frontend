@@ -48,6 +48,8 @@
                     <thead>
                         <tr>
                             <th>Nome do Aluno</th>
+                            <th>Matrícula</th>
+                            <th>Total de Horas</th>
                             <th>Status</th>
                             <th>Curso vinculado</th>
                             <th>Ações</th>
@@ -58,6 +60,26 @@
 
                     </tbody>
                 </table>
+                <div class="rodape-tabela">
+                    <div class="info-tabela" id="info-alunos">
+                        Mostrando 0 de 0 alunos
+                    </div>
+
+                    <div class="paginacao" id="paginacao-alunos">
+                        <button type="button">&lt;</button>
+                        <button type="button" class="ativo">1</button>
+                        <button type="button">&gt;</button>
+                    </div>
+
+                    <div class="itens-pagina">
+                        <label for="itens-pagina-alunos">Itens por página:</label>
+                        <select id="itens-pagina-alunos">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
             </div>
 
         </main>

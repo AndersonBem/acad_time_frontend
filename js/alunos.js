@@ -1,11 +1,30 @@
 protegerPagina();
+
+let paginaAtual = 1;
+let itensPorPagina = 10;
+let totalAlunos = 0;
+
 async function listarAlunos() {
     const container = document.getElementById("lista-alunos");
     const busca = document.getElementById("buscar").value.toLowerCase().trim();
     const filtroStatus = document.getElementById("filtro-status").value;
 
     const token = localStorage.getItem("access_token");
-    const url = CONFIG.BASE_URL.replace(/\/$/, "") + CONFIG.ENDPOINTS.alunos;
+
+    const params = new URLSearchParams();
+
+    if (busca) {
+        params.set("busca", busca);
+    }
+
+    if (filtroStatus) {
+        params.set("status", filtroStatus);
+    }
+
+    params.set("page", paginaAtual);
+    params.set("page_size", itensPorPagina);
+
+    const url = `${CONFIG.BASE_URL.replace(/\/$/, "")}${CONFIG.ENDPOINTS.alunos}?${params.toString()}`;
 
     try {
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
@@ -15,76 +34,49 @@ async function listarAlunos() {
             headers
         });
 
-        const alunos = await response.json().catch(() => null);
-        alunos.sort((a, b) => (a.nome || "").localeCompare((b.nome || ""), "pt-BR"))
-
-        container.innerHTML = "";
+        const dados = await response.json().catch(() => null);
 
         if (!response.ok) {
             container.innerHTML = `
                 <tr>
-                    <td colspan="4">Erro ao carregar alunos.</td>
+                    <td colspan="6">Erro ao carregar alunos.</td>
                 </tr>
             `;
+            atualizarInfoAlunos(0);
+            renderizarPaginacao();
             return;
         }
 
-        if (!Array.isArray(alunos) || alunos.length === 0) {
+        const alunos = Array.isArray(dados)
+            ? dados
+            : dados?.results || [];
+
+        totalAlunos = Array.isArray(dados)
+            ? alunos.length
+            : dados?.count || 0;
+
+        container.innerHTML = "";
+
+        if (alunos.length === 0) {
             container.innerHTML = `
                 <tr>
-                    <td colspan="4">Nenhum aluno encontrado.</td>
+                    <td colspan="6">Nenhum aluno encontrado.</td>
                 </tr>
             `;
+            atualizarInfoAlunos(0);
+            renderizarPaginacao();
             return;
         }
 
-        const idsUsados = new Set();
-
-        const alunosFiltrados = alunos.filter((aluno) => {
-            const id = aluno.id || aluno.id_aluno;
-
-            if (idsUsados.has(id)) return false;
-            idsUsados.add(id);
-
-            const nome = (aluno.nome || "").toLowerCase();
-
-            const cursosArray = Array.isArray(aluno.cursos) ? aluno.cursos : [];
-
-            const cursosTexto = cursosArray.length
-                ? cursosArray.map(item => (item.curso || "").toLowerCase()).join(", ")
-                : "";
-
-            const statusArray = cursosArray.map(item => (item.status || "").toUpperCase());
-
-            const matchBusca =
-                nome.includes(busca) ||
-                cursosTexto.includes(busca);
-
-            const matchStatus =
-                filtroStatus === "" ||
-                statusArray.includes(filtroStatus);
-
-            return matchBusca && matchStatus;
-        });
-
-        if (alunosFiltrados.length === 0) {
-            container.innerHTML = `
-                <tr>
-                    <td colspan="4">Nenhum aluno encontrado.</td>
-                </tr>
-            `;
-            return;
-        }
-
-        alunosFiltrados.forEach((aluno) => {
+        alunos.forEach((aluno) => {
             const tr = document.createElement("tr");
 
             const cursosTexto = Array.isArray(aluno.cursos) && aluno.cursos.length
-                ? aluno.cursos.map(item => item.curso).join(", ")
+                ? aluno.cursos.map((item) => item.curso).join(", ")
                 : "Sem curso";
 
             const statusTexto = Array.isArray(aluno.cursos) && aluno.cursos.length
-                ? aluno.cursos.map(item => {
+                ? aluno.cursos.map((item) => {
                     const status = (item.status || "").toUpperCase();
 
                     if (status === "ATIVO") return "Ativo";
@@ -98,6 +90,8 @@ async function listarAlunos() {
 
             tr.innerHTML = `
                 <td>${aluno.nome ?? "-"}</td>
+                <td>${aluno.matricula ?? "-"}</td>
+                <td>${aluno.total_horas ?? aluno.totalHoras ?? "0.00"}h</td>
                 <td>${statusTexto}</td>
                 <td>${cursosTexto}</td>
                 <td>
@@ -108,35 +102,107 @@ async function listarAlunos() {
             container.appendChild(tr);
         });
 
+        atualizarInfoAlunos(alunos.length);
+        renderizarPaginacao();
+
     } catch (error) {
         container.innerHTML = `
             <tr>
-                <td colspan="4">Não foi possível conectar ao servidor.</td>
+                <td colspan="6">Não foi possível conectar ao servidor.</td>
             </tr>
         `;
+        atualizarInfoAlunos(0);
+        renderizarPaginacao();
     }
+}
+
+function atualizarInfoAlunos(quantidadePagina) {
+    const info = document.getElementById("info-alunos");
+
+    if (!info) return;
+
+    info.textContent = `Mostrando ${quantidadePagina} de ${totalAlunos} alunos`;
+}
+
+function renderizarPaginacao() {
+    const container = document.getElementById("paginacao-alunos");
+
+    if (!container) return;
+
+    const totalPaginas = Math.max(1, Math.ceil(totalAlunos / itensPorPagina));
+
+    if (paginaAtual > totalPaginas) {
+        paginaAtual = totalPaginas;
+    }
+
+    container.innerHTML = "";
+
+    const btnAnterior = document.createElement("button");
+    btnAnterior.type = "button";
+    btnAnterior.textContent = "<";
+    btnAnterior.disabled = paginaAtual === 1;
+    btnAnterior.onclick = () => {
+        paginaAtual--;
+        listarAlunos();
+    };
+    container.appendChild(btnAnterior);
+
+    for (let i = 1; i <= totalPaginas; i++) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.textContent = i;
+
+        if (i === paginaAtual) {
+            btn.classList.add("ativo");
+        }
+
+        btn.onclick = () => {
+            paginaAtual = i;
+            listarAlunos();
+        };
+
+        container.appendChild(btn);
+    }
+
+    const btnProximo = document.createElement("button");
+    btnProximo.type = "button";
+    btnProximo.textContent = ">";
+    btnProximo.disabled = paginaAtual === totalPaginas;
+    btnProximo.onclick = () => {
+        paginaAtual++;
+        listarAlunos();
+    };
+    container.appendChild(btnProximo);
 }
 
 function editarAluno(id) {
     window.location.href = `cadastrarAluno.html?id=${id}`;
 }
 
-document.getElementById("buscar").addEventListener("input", listarAlunos);
-document.getElementById("filtro-status").addEventListener("change", listarAlunos);
+document.getElementById("buscar").addEventListener("input", () => {
+    paginaAtual = 1;
+    listarAlunos();
+});
+
+document.getElementById("filtro-status").addEventListener("change", () => {
+    paginaAtual = 1;
+    listarAlunos();
+});
+
+document.getElementById("itens-pagina-alunos").addEventListener("change", (event) => {
+    itensPorPagina = Number(event.target.value);
+    paginaAtual = 1;
+    listarAlunos();
+});
 
 listarAlunos();
 
-
-
 function logout() {
-    // Limpar dados de sessão
     localStorage.removeItem("access_token");
     sessionStorage.clear();
-    
-    // Redirecionar para a página de login
     window.location.href = "login.html";
 }
 
 function toggleMenu() {
-  document.querySelector('.sidebar').classList.toggle('active');
+    document.querySelector(".sidebar").classList.toggle("active");
 }
