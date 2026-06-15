@@ -130,6 +130,9 @@
             <div class="acoes-final">
               <button type="button" class="btn-reprovar" id="btnReprovar">Reprovar</button>
               <button type="button" class="btn-aprovar" id="btnAprovar">Aprovar</button>
+              <button type="button" class="btn-analise" id="btn-verificar-suspeita">
+                Verificar possível reutilização
+              </button>
             </div>
 
           </div>
@@ -139,7 +142,18 @@
 
     </main>
   </div>
+  <div id="modalSuspeitas" class="modal-suspeitas escondido">
+    <div class="modal-suspeitas-conteudo">
+      <div class="modal-suspeitas-header">
+        <h2>Possíveis reutilizações encontradas</h2>
+        <button type="button" id="btnFecharModalSuspeitas">×</button>
+      </div>
 
+      <p id="resumoSuspeitas"></p>
+
+      <div id="listaSuspeitas" class="lista-suspeitas"></div>
+    </div>
+  </div>
   <script src="../js/config.js"></script>
   <script src="../js/utils.js"></script>
   <script src="../js/sidebar.js"></script>

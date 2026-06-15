@@ -1,12 +1,4 @@
 .content {
-  padding: 100px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-
-
-.content {
   padding: 32px;
   width: 100%;
   box-sizing: border-box;
@@ -33,6 +25,7 @@
   margin-top: 6px;
   color: #2f4f7f;
 }
+
 .conteudo {
   position: relative;
   z-index: 1;
@@ -53,7 +46,8 @@
   align-items: start;
 }
 
-.coluna-esquerda {
+.coluna-esquerda,
+.coluna-direita {
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -104,13 +98,6 @@
   resize: none;
 }
 
-.coluna-direita {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  min-width: 0;
-}
-
 .historico {
   background: #f3f5f9;
   border-radius: 14px;
@@ -139,7 +126,7 @@
 }
 
 .item-historico p {
-  margin: 4px 0 0 0;
+  margin: 4px 0 0;
   color: #4b4b4b;
   font-size: 14px;
 }
@@ -212,6 +199,7 @@
 
 .btn-correcao,
 .btn-reprovar,
+.btn-analise,
 .btn-aprovar {
   border: none;
   padding: 12px 18px;
@@ -235,6 +223,11 @@
   color: white;
 }
 
+.btn-analise {
+  background: #129c25;
+  color: white;
+}
+
 .obrigatorio {
   color: red;
   font-weight: bold;
@@ -242,6 +235,167 @@
 
 #cargaAprovada {
   width: 100%;
+}
+
+.escondido {
+  display: none;
+}
+
+.modal-suspeitas {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 10px;
+}
+
+.modal-suspeitas.escondido {
+  display: none;
+}
+
+.modal-suspeitas-conteudo {
+  background: #fff;
+  width: 98vw;
+  max-width: 1500px;
+  height: 94vh;
+  overflow-y: auto;
+  border-radius: 8px;
+  padding: 22px;
+  box-sizing: border-box;
+}
+
+.modal-suspeitas-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.modal-suspeitas-header h2 {
+  margin: 0;
+}
+
+.modal-suspeitas-header button {
+  border: 0;
+  background: transparent;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+.lista-suspeitas {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.comparacao-certificados {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 18px 0 22px;
+}
+
+.certificado-preview {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  background: #fafafa;
+  min-width: 0;
+}
+
+.certificado-preview h3 {
+  margin: 0 0 12px;
+}
+
+.certificado-preview-area {
+  width: 100%;
+  height: 68vh;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.certificado-imagem {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.certificado-iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+.certificado-vazio {
+  color: #777;
+  font-weight: 600;
+}
+
+
+.lista-suspeitas-itens {
+  display: grid;
+  gap: 12px;
+}
+
+.item-suspeita {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 14px;
+  background: #fafafa;
+}
+
+.item-suspeita h3 {
+  margin: 0 0 8px;
+}
+
+.item-suspeita p {
+  margin: 4px 0;
+}
+
+.item-suspeita-acoes {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.btn-comparar-certificado {
+  background: #174f91;
+  color: #fff;
+  border: 1px solid #174f91;
+  border-radius: 6px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-abrir-submissao {
+  background: #fff;
+  color: #174f91;
+  border: 1px solid #174f91;
+  border-radius: 6px;
+  padding: 9px 14px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.btn-comparar-certificado:hover {
+  background: #0f386b;
+}
+
+.btn-abrir-submissao:hover {
+  background: #eef5ff;
 }
 
 @media (max-width: 900px) {
@@ -253,11 +407,9 @@
     padding: 20px;
   }
 
-  .analise-layout {
-    grid-template-columns: 1fr;
-  }
-
-  .grid-form {
+  .analise-layout,
+  .grid-form,
+  .comparacao-certificados {
     grid-template-columns: 1fr;
   }
 
@@ -271,10 +423,13 @@
 
   .btn-correcao,
   .btn-reprovar,
-  .btn-aprovar {
+  .btn-aprovar,
+  .btn-analise {
     width: 100%;
   }
+
 }
+
 @media (max-width: 768px) {
   .content {
     padding: 92px 16px 20px;
@@ -316,8 +471,18 @@
     position: static;
     flex-shrink: 0;
   }
-}
 
+  .modal-suspeitas {
+    padding: 0;
+  }
+
+  .modal-suspeitas-conteudo {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    padding: 18px;
+  }
+}
 
 @media (max-width: 480px) {
   .page-header {

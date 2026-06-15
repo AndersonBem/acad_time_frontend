@@ -1,10 +1,18 @@
+const params = new URLSearchParams(window.location.search);
+const emailParam = params.get('email');
+
+if (emailParam) {
+    document.getElementById('email').value = emailParam;
+}
+
+
 document.getElementById('loginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 
     const email = document.getElementById('email').value.trim();
     const senha = document.getElementById('senha').value.trim();
 
-  
+
     if (!email || !senha) {
         alert('Preencha todos os campos!');
         return;
